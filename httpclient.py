@@ -85,8 +85,8 @@ class HTTPClient(object):
 
         request = "GET " + path + " HTTP/1.1\r\n"
         request += "Host: " + parsed.hostname + "\r\n"
-        request += "Accept: */*\r\n"
-        request += "Connection: close\r\n"
+        request += "Accept: */*\r\n" # not even sure if I need this
+        request += "Connection: close\r\n" # gets request data faster
         request += "\r\n"
 
         print request # TODO: Remove
