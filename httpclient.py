@@ -37,7 +37,9 @@ class HTTPClient(object):
 
     def connect(self, host, port):
         # use sockets!
-        return None
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.connect((host, port))
+        return s
 
     def get_code(self, data):
         return None
@@ -71,18 +73,27 @@ class HTTPClient(object):
         return HTTPRequest(code, body)
 
     def command(self, url, command="GET", args=None):
+        print "" # TODO: Remove
+        print "In function 'command'" # TODO: Remove
+        print "url = ", url, "| command = ", command, "| args = ", args # TODO: Remove
         if (command == "POST"):
             return self.POST( url, args )
         else:
             return self.GET( url, args )
     
 if __name__ == "__main__":
+    print "" # TODO: Remove
+    print "In function 'main'" # TODO: Remove
     client = HTTPClient()
     command = "GET"
     if (len(sys.argv) <= 1):
         help()
         sys.exit(1)
     elif (len(sys.argv) == 3):
-        print client.command( sys.argv[1], sys.argv[2] )
+        print "argv[1] = ", sys.argv[1], "| argv[2] = ", sys.argv[2] # TODO: Remove
+        #print client.command( sys.argv[1], sys.argv[2] ) # TODO: Fix Maybe
+        print client.command( sys.argv[2], sys.argv[1])
     else:
-        print client.command( command, sys.argv[1] )    
+        print "command", command, "| argv[1] = ", sys.argv[1] # TODO: Remove
+        #print client.command( command, sys.argv[1] ) # TODO: Fix Maybe
+        print client.command( sys.argv[1], command )
