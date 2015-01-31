@@ -72,18 +72,26 @@ class HTTPClient(object):
         body = ""
 
         parsed = urlparse(url)
+        path = parsed.path
+
+        if (path == ""):
+            path = "/"
+
         print parsed # TODO: Remove
-        print "hostname = ", parsed.hostname, "| port = ", parsed.port # TODO: Remove
+        print "hostname = ", parsed.hostname, "| port = ", parsed.port, "| path = ", path # TODO: Remove
         print "" # TODO: Remove
+
         s = self.connect(parsed.hostname, parsed.port)
 
-        body += "GET " + parsed.path + " HTTP/1.1\r\n"
-        body += "Host: " + parsed.hostname + "\r\n"
-        body += "Accept: */*\r\n"
-        body += "Connection: close\r\n"
-        body += "\r\n"
+        request = "GET " + path + " HTTP/1.1\r\n"
+        request += "Host: " + parsed.hostname + "\r\n"
+        request += "Accept: */*\r\n"
+        request += "Connection: close\r\n"
+        request += "\r\n"
 
-        s.sendall(body)
+        print request # TODO: Remove
+
+        s.sendall(request)
         response = self.recvall(s)
         print response
 
