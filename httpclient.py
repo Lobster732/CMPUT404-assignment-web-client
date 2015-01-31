@@ -65,6 +65,12 @@ class HTTPClient(object):
                 done = not part
         return str(buffer)
 
+    # parse out the code and the body from the response
+    def parse_response(self, response):
+        code = 500
+        body = ""
+        return (code, body)
+
     def GET(self, url, args=None):
         print "" # TODO: Remove
         print "In function 'GET'" # TODO: Remove
@@ -93,7 +99,8 @@ class HTTPClient(object):
 
         s.sendall(request)
         response = self.recvall(s)
-        print response
+        (code, body) = self.parse_response(response)
+        print response # TODO: Remove
 
         return HTTPRequest(code, body)
 
