@@ -66,19 +66,26 @@ class HTTPClient(object):
         return str(buffer)
 
     def GET(self, url, args=None):
+        print "" # TODO: Remove
+        print "In function 'GET'" # TODO: Remove
         code = 500
         body = ""
 
         parsed = urlparse(url)
+        print parsed # TODO: Remove
+        print "hostname = ", parsed.hostname, "| port = ", parsed.port # TODO: Remove
+        print "" # TODO: Remove
         s = self.connect(parsed.hostname, parsed.port)
 
         body += "GET " + parsed.path + " HTTP/1.1\r\n"
         body += "Host: " + parsed.hostname + "\r\n"
         body += "Accept: */*\r\n"
-        body += "Connection: Close\r\n"
+        body += "Connection: close\r\n"
         body += "\r\n"
 
-        s.send(body)
+        s.sendall(body)
+        response = self.recvall(s)
+        print response
 
         return HTTPRequest(code, body)
 
