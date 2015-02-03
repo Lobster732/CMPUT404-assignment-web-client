@@ -49,13 +49,13 @@ class HTTPClient(object):
         return s
 
     def get_code(self, data):
-        return None
+        return data.split()[1]
 
     def get_headers(self, data):
-        return None
+        return data.split("\r\n\r\n")[0]
 
     def get_body(self, data):
-        return None
+        return data.split("\r\n\r\n")[1]
 
     # read everything from the socket
     def recvall(self, sock):
@@ -71,13 +71,13 @@ class HTTPClient(object):
 
     # parse out the code and the body from the response
     def parse_response(self, response):
-        code = 500
-        body = ""
+        code = self.get_code(response)
+        body = self.get_body(response)
         return (code, body)
 
     def GET(self, url, args=None):
-        print ""  # TODO: Remove
-        print "In function 'GET'"  # TODO: Remove
+        #print ""  # TODO: Remove
+        #print "In function 'GET'"  # TODO: Remove
         code = 500
         body = ""
 
@@ -87,10 +87,10 @@ class HTTPClient(object):
         if (path == ""):
             path = "/"
 
-        print parsed  # TODO: Remove
-        print "hostname = ", parsed.hostname, "| port = ", \
-            parsed.port, "| path = ", path  # TODO: Remove
-        print ""  # TODO: Remove
+        #print parsed  # TODO: Remove
+        #print "hostname = ", parsed.hostname, "| port = ", \
+            #parsed.port, "| path = ", path  # TODO: Remove
+        #print ""  # TODO: Remove
 
         s = self.connect(parsed.hostname, parsed.port)
 
@@ -100,18 +100,63 @@ class HTTPClient(object):
         request += "Connection: close\r\n"  # gets request data faster
         request += "\r\n"
 
-        print request  # TODO: Remove
+        #print request  # TODO: Remove
 
         s.sendall(request)
         response = self.recvall(s)
         (code, body) = self.parse_response(response)
-        print response  # TODO: Remove
+        #print response  # TODO: Remove
+
+        #print "code = ", code  # , "\r\nbody = \r\n", body  # TODO: Remove
 
         return HTTPRequest(code, body)
 
     def POST(self, url, args=None):
+        #print ""  # TODO: Remove
+        #print "In function 'POST'"  # TODO: Remove
         code = 500
         body = ""
+
+        parsed = urlparse(url)
+        path = parsed.path
+
+        if (path == ""):
+            path = "/"
+
+        #print parsed  # TODO: Remove
+        #print "hostname = ", parsed.hostname, "| port = ", \
+            #parsed.port, "| path = ", path  # TODO: Remove
+        #print ""  # TODO: Remove
+
+        s = self.connect(parsed.hostname, parsed.port)
+
+        length = 0
+        post_data = ""
+        if (args is not None):
+            post_data = urllib.urlencode(args)
+            length = len(post_data)
+
+        request = "POST " + path + " HTTP/1.1\r\n"
+        request += "Host: " + parsed.hostname + "\r\n"
+        request += "Accept: */*\r\n"  # not even sure if I need this
+        request += "Content-Length: " + str(length) + "\r\n"
+        if (length > 0):
+            request += "Content-Type: application/x-www-form-urlencoded\r\n"
+        request += "Connection: close\r\n"  # gets request data faster
+        request += "\r\n"
+
+        if (length > 0):
+            request += post_data
+
+        #print request  # TODO: Remove
+
+        s.sendall(request)
+        response = self.recvall(s)
+        (code, body) = self.parse_response(response)
+        #print response  # TODO: Remove
+
+        #print "code = \r\n", code, "\r\nbody = \r\n", body  # TODO: Remove
+
         return HTTPRequest(code, body)
 
     def command(self, url, command="GET", args=None):
@@ -137,7 +182,11 @@ if __name__ == "__main__":
             #sys.argv[2]  # TODO: Remove
         # print client.command( sys.argv[1], sys.argv[2] )  # TODO: Fix Maybe
         print client.command(sys.argv[2], sys.argv[1])
-    else:
+    elif (len(sys.argv) == 2):
         #print "command", command, "| argv[1] = ", sys.argv[1]  # TODO: Remove
         # print client.command( command, sys.argv[1] )  # TODO: Fix Maybe
         print client.command(sys.argv[1], command)
+    elif (len(sys.argv) == 4):
+        #print "argv[1] = ", sys.argv[1], "| argv[2] = ", \
+            #sys.argv[2], "| argv[3] = ", sys.argv[3]  # TODO: Remove
+        print client.command(sys.argv[2], sys.argv[1], sys.argv[3])
