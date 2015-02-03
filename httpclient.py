@@ -76,8 +76,6 @@ class HTTPClient(object):
         return (code, body)
 
     def GET(self, url, args=None):
-        #print ""  # TODO: Remove
-        #print "In function 'GET'"  # TODO: Remove
         code = 500
         body = ""
 
@@ -86,11 +84,6 @@ class HTTPClient(object):
 
         if (path == ""):
             path = "/"
-
-        #print parsed  # TODO: Remove
-        #print "hostname = ", parsed.hostname, "| port = ", \
-            #parsed.port, "| path = ", path  # TODO: Remove
-        #print ""  # TODO: Remove
 
         s = self.connect(parsed.hostname, parsed.port)
 
@@ -100,20 +93,13 @@ class HTTPClient(object):
         request += "Connection: close\r\n"  # gets request data faster
         request += "\r\n"
 
-        #print request  # TODO: Remove
-
         s.sendall(request)
         response = self.recvall(s)
         (code, body) = self.parse_response(response)
-        #print response  # TODO: Remove
-
-        #print "code = ", code  # , "\r\nbody = \r\n", body  # TODO: Remove
 
         return HTTPRequest(int(code), body)
 
     def POST(self, url, args=None):
-        #print ""  # TODO: Remove
-        #print "In function 'POST'"  # TODO: Remove
         code = 500
         body = ""
 
@@ -122,11 +108,6 @@ class HTTPClient(object):
 
         if (path == ""):
             path = "/"
-
-        #print parsed  # TODO: Remove
-        #print "hostname = ", parsed.hostname, "| port = ", \
-            #parsed.port, "| path = ", path  # TODO: Remove
-        #print ""  # TODO: Remove
 
         s = self.connect(parsed.hostname, parsed.port)
 
@@ -148,45 +129,27 @@ class HTTPClient(object):
         if (length > 0):
             request += post_data
 
-        #print request  # TODO: Remove
-
         s.sendall(request)
         response = self.recvall(s)
         (code, body) = self.parse_response(response)
-        #print response  # TODO: Remove
-
-        #print "code = \r\n", code, "\r\nbody = \r\n", body  # TODO: Remove
 
         return HTTPRequest(int(code), body)
 
     def command(self, url, command="GET", args=None):
-        #print ""  # TODO: Remove
-        #print "In function 'command'"  # TODO: Remove
-        #print "url = ", url, "| command = ", command, \
-            #"| args = ", args  # TODO: Remove
         if (command == "POST"):
             return self.POST(url, args)
         else:
             return self.GET(url, args)
 
 if __name__ == "__main__":
-    #print ""  # TODO: Remove
-    #print "In function 'main'"  # TODO: Remove
     client = HTTPClient()
     command = "GET"
     if (len(sys.argv) <= 1):
         help()
         sys.exit(1)
     elif (len(sys.argv) == 3):
-        #print "argv[1] = ", sys.argv[1], "| argv[2] = ", \
-            #sys.argv[2]  # TODO: Remove
-        # print client.command( sys.argv[1], sys.argv[2] )  # TODO: Fix Maybe
         print client.command(sys.argv[2], sys.argv[1])
     elif (len(sys.argv) == 2):
-        #print "command", command, "| argv[1] = ", sys.argv[1]  # TODO: Remove
-        # print client.command( command, sys.argv[1] )  # TODO: Fix Maybe
         print client.command(sys.argv[1], command)
     elif (len(sys.argv) == 4):
-        #print "argv[1] = ", sys.argv[1], "| argv[2] = ", \
-            #sys.argv[2], "| argv[3] = ", sys.argv[3]  # TODO: Remove
         print client.command(sys.argv[2], sys.argv[1], sys.argv[3])
