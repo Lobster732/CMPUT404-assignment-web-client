@@ -140,6 +140,8 @@ class HTTPClient(object):
         request += "Host: " + parsed.hostname + "\r\n"
         request += "Accept: */*\r\n"  # not even sure if I need this
         request += "Content-Length: " + str(length) + "\r\n"
+        if (length > 0):
+            request += "Content-Type: application/x-www-form-urlencoded\r\n"
         request += "Connection: close\r\n"  # gets request data faster
         request += "\r\n"
 
