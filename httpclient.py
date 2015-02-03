@@ -109,7 +109,7 @@ class HTTPClient(object):
 
         #print "code = ", code  # , "\r\nbody = \r\n", body  # TODO: Remove
 
-        return HTTPRequest(code, body)
+        return HTTPRequest(int(code), body)
 
     def POST(self, url, args=None):
         #print ""  # TODO: Remove
@@ -157,7 +157,7 @@ class HTTPClient(object):
 
         #print "code = \r\n", code, "\r\nbody = \r\n", body  # TODO: Remove
 
-        return HTTPRequest(code, body)
+        return HTTPRequest(int(code), body)
 
     def command(self, url, command="GET", args=None):
         #print ""  # TODO: Remove
